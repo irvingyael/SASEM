@@ -14,7 +14,7 @@
 	<application
 		android:icon="@drawable/icon"
 		android:label="SASEM"
-		android:theme="@android:style/Theme.Holo">
+		android:theme="@android:style/Theme.Holo.Light">
 		<activity
 			android:windowSoftInputMode="stateHidden"
 			android:launchMode="singleTop"

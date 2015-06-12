@@ -3,7 +3,7 @@ IconFile=
 NumberOfModules=0
 Build1=Default,b4a.example
 DoNotOverwriteManifest=False
-ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~SetApplicationAttribute(android:theme, "@android:style/Theme.Holo")~\n~'End of default text.~\n~
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~SetApplicationAttribute(android:theme, "@android:style/Theme.Holo.Light")~\n~'End of default text.~\n~
 NumberOfFiles=0
 NumberOfLibraries=2
 Library1=core
@@ -26,7 +26,9 @@ Library2=reflection
 Sub Process_Globals
 	'These global variables will be declared once when the application starts.
 	'These variables can be accessed from all modules.
-
+	Dim Renglon2 As Renglones
+	Dim Renglon As Renglones
+	Dim Renglon3 As Renglones
 End Sub
 
 Sub Globals
@@ -39,15 +41,51 @@ Sub Globals
 	Dim lbl_pregunta As Label
 	Dim btn_nuevo, btn_registrado, btn_general As Button
 	Private intento As Intent
+	
+	Dim lbl_direccion_web As Label
+	Dim etxt_direccion_web As EditText
+	Dim btn_ingresar_url As Button
+	
+	Dim lbl_complete, lbl_recuperar_pass As Label
+	Dim etxt_correo, etxt_pass As EditText
+	Dim btn_ingresar As Button
+	
+	Dim lbl_hola,lbl_usuario, lbl_num_mascotas, lbl_tienes As Label
+	Dim btn_mis_mascotas, btn_historial, btn_nuevo, btn_ultimos As Button
+	
+	Dim lbl_mis_mascotas As Label
+	Dim lv_lista_mascotas As ListView
+	Type Renglones (Renglon1 As String, Renglon2 As String)
+	
+	Dim imv_fotografia As ImageView
+	Dim lbl_nombre, lbl_raza, lbl_color, lbl_tamaño, lbl_fecha_adopcion As Label
+	
+	Dim lbl_reportes As Label
+	Dim lv_lista_reportes As ListView
+	
+	Dim imv_fotografia_reporte As ImageView
+	Dim btn_escanear, btn_tomar_foto, btn_enviar As Button
+	
+	Dim lbl_ultimos As Label
+	Dim lv_lista_ultimos As ListView
+	
+	Dim imv_fotografia_refugio As ImageView
+	Dim lbl_nombre_refugio, lbl_raza_refugio, lbl_color_refugio, lbl_tamaño_refugio, lbl_edad_aprox As Label
 End Sub
 
 Sub Activity_Create(FirstTime As Boolean)
 	'Do not forget to load the layout file created with the visual designer. For example:
 	'Activity.LoadLayout("Layout1")
-	bmpLogo.Initialize(LoadBitmap(File.DirAssets,"logo.png"))
-	bmpLogo2.Initialize(LoadBitmap(File.DirAssets,"logo_fondo.png"))
-	intento.Initialize(intento.ACTION_VIEW, "https://play.google.com/store/search?q=qr&hl=es_419")
-	dibujar_splash
+'	bmpLogo.Initialize(LoadBitmap(File.DirAssets,"logo.png"))
+'	bmpLogo2.Initialize(LoadBitmap(File.DirAssets,"logo_fondo.png"))
+'	intento.Initialize(intento.ACTION_VIEW, "https://play.google.com/store/search?q=qr&hl=es_419")
+	lv_lista_mascotas.Initialize("lv_lista_mascotas")
+	lv_lista_reportes.Initialize("lv_lista_reportes")
+	lv_lista_ultimos.Initialize("lv_lista_ultimos")
+	imv_fotografia.Initialize("imv_fotografia")
+	imv_fotografia_reporte.Initialize("imv_fotografia_reporte")
+	imv_fotografia_refugio.Initialize("imv_fotografia_refugio")
+	dibujar_configuracion
 End Sub
 
 Sub Activity_Resume
@@ -77,19 +115,164 @@ Sub dibujar_splash
 		End If
 End Sub
 
+Sub dibujar_configuracion
+	Activity.Title="Seguimiento de Adopción"
+	dibujar_label(lbl_direccion_web,"lbl_direccion_web","Ingrese la direccion web del sitio de adopcion de su mascota:",0%x,10%y,100%x,20%y)
+	dibujar_text(etxt_direccion_web,"etxt_direccion_web",etxt_direccion_web.INPUT_TYPE_TEXT,"www.dejandohuella.com",False,15%x,40%y,70%x,10%y)
+	dibujar_button(btn_ingresar_url,"btn_ingresar_url",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Ingresar",35%x,70%y,30%x,10%y)
+End Sub
+
+Sub btn_ingresar_url_Click
+	dibujar_inicio
+End Sub
+
 Sub dibujar_inicio
-	Activity.Title="SASEM"
-	bmpLogo2.Gravity = Gravity.CENTER
-	Activity.Background = bmpLogo2
-	dibujar_label(lbl_pregunta,"lbl_pregunta","Tipo de usuario:",0%x,20%y,100%x,10%y)
-	dibujar_button(btn_nuevo,"btn_nuevo",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Nuevo",15%x,35%y,70%x,10%y)
-	dibujar_button(btn_registrado,"btn_registrado",Colors.RGB(0,153,73),Colors.RGB(0,102,51),"Registrado",15%x,50%y,70%x,10%y)
+	Activity.RemoveAllViews
+	Activity.Title="Inicio de sesión"
+	dibujar_label(lbl_complete,"lbl_complete","Ingrese sus datos:",0%x,10%y,100%x,10%y)
+	dibujar_text(etxt_correo,"etxt_correo",etxt_correo.INPUT_TYPE_TEXT,"Correo",False,15%x,30%y,70%x,10%y)
+	dibujar_text(etxt_pass,"etxt_pass",etxt_pass.INPUT_TYPE_TEXT,"Contraseña",True,15%x,45%y,70%x,10%y)
+	dibujar_button(btn_ingresar,"btn_ingresar",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Ingresar",35%x,70%y,30%x,10%y)
+	lbl_recuperar_pass.Initialize("lbl_recuperar_pass")
+    lbl_recuperar_pass.TextSize = 2%x
+    lbl_recuperar_pass.TextColor = Colors.Gray
+    lbl_recuperar_pass.Gravity = Gravity.CENTER
+    lbl_recuperar_pass.text = "He olvidado mi contraseña"
+    Activity.AddView(lbl_recuperar_pass,0%x,60%y,100%x,10%x)
+End Sub
+
+Sub btn_ingresar_Click
+	dibujar_datos
+End Sub
+
+Sub dibujar_datos
+	Activity.RemoveAllViews
+	Activity.Title="Datos personales"
+	dibujar_label(lbl_hola,"lbl_hola","Hola:",0%x,2%y,40%x,10%y)
+	dibujar_label(lbl_usuario,"lbl_usuario","Irving Amador",30%x,2%y,50%x,10%y)
+	dibujar_label(lbl_tienes,"lbl_tienes","Tienes:",0%x,10%y,40%x,10%y)
+	dibujar_label(lbl_num_mascotas,"lbl_num_mascotas","1 Mascota",30%x,10%y,50%x,10%y)
+	dibujar_button(btn_mis_mascotas,"btn_mis_mascotas",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Mis mascotas",0.5%x,23%y,99%x,22%y)
+	dibujar_button(btn_historial,"btn_historial",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Historial de reportes",0.5%x,45.5%y,49%x,20%y)
+	dibujar_button(btn_nuevo,"btn_nuevo",Colors.RGB(0,153,73),Colors.RGB(0,102,51),"Nuevo reporte",50%x,45.5%y,49%x,20%y)
+	dibujar_button(btn_ultimos,"btn_ultimos",Colors.RGB(0,153,73),Colors.RGB(0,102,51),"Últimas mascotas agregadas",0.5%x,66%y,99%x,22%y)
 	casos=1
+End Sub
+
+Sub btn_mis_mascotas_Click
+	dibujar_mismascotas1
+End Sub
+
+Sub btn_historial_Click
+	dibujar_historial
+End Sub
+
+Sub btn_nuevo_Click
+	dibujar_nuevoreporte
+End Sub
+
+Sub btn_ultimos_Click
+	dibujar_ultimosagregados1
+End Sub
+
+Sub dibujar_mismascotas1
+	Activity.RemoveAllViews
+	dibujar_label(lbl_mis_mascotas,"lbl_mis_mascotas","Mis Mascotas:",0%x,5%y,100%x,10%y)
+	lv_lista_mascotas.Clear
+	Dim Renglon2 As Renglones
+				Renglon2.Renglon1 = "Rocko"
+				Renglon2.Renglon2 = "Mestizo"
+				lv_lista_mascotas.TwoLinesLayout.Label.Color=Colors.RGB(0,153,153)
+				lv_lista_mascotas.TwoLinesLayout.SecondLabel.Color=Colors.White
+				lv_lista_mascotas.AddTwoLines2("Nombre: "&Renglon2.Renglon1, "Raza: "&Renglon2.Renglon2,Renglon2)
+	lv_lista_mascotas.Color=Colors.Transparent
+	Activity.AddView(lv_lista_mascotas, 5%x, 20%y, 90%x, 85%y)
+End Sub
+
+Sub lv_lista_mascotas_ItemClick (Position As Int, Value As Object)
+'	Dim codigo_producto As Int
+'	Dim Renglon As Renglones
+'	Renglon = Value
+'	codigo_producto=Renglon.Renglon1
+'	obtener_nombre_producto
+	dibujar_mismascotas2
+End Sub
+
+Sub dibujar_mismascotas2
+	Activity.RemoveAllViews
+	Activity.Title="Datos de mi mascota"
+	imv_fotografia.Color=Colors.Gray
+	Activity.AddView(imv_fotografia,25%x, 5%y, 50%x, 35%y)
+	dibujar_label(lbl_nombre,"lbl_nombre","Nombre:",0%x,40%y,40%x,10%y)
+	dibujar_label(lbl_raza,"lbl_raza","Raza:",0%x,50%y,40%x,10%y)
+	dibujar_label(lbl_color,"lbl_color","Color:",0%x,60%y,40%x,10%y)
+	dibujar_label(lbl_tamaño,"lbl_tamaño","Tamaño:",0%x,70%y,40%x,10%y)
+	dibujar_label(lbl_fecha_adopcion,"lbl_fecha_adopcion","Fecha de Adopción:",0%x,80%y,70%x,10%y)
+End Sub
+
+Sub dibujar_historial
+	Activity.RemoveAllViews
+	dibujar_label(lbl_reportes,"lbl_reportes","Mis Reportes:",0%x,5%y,100%x,10%y)
+	lv_lista_reportes.Clear
+	Dim Renglon As Renglones
+				Renglon.Renglon1 = "Rocko"
+				Renglon.Renglon2 = "19-05-15"
+				lv_lista_reportes.TwoLinesLayout.Label.Color=Colors.RGB(0,153,153)
+				lv_lista_reportes.TwoLinesLayout.SecondLabel.Color=Colors.White
+				lv_lista_reportes.AddTwoLines2("Reporte de: "&Renglon.Renglon1, "Fecha: "&Renglon.Renglon2,Renglon)
+	lv_lista_reportes.Color=Colors.Transparent
+	Activity.AddView(lv_lista_reportes, 5%x, 20%y, 90%x, 85%y)
+End Sub
+
+Sub dibujar_nuevoreporte
+	Activity.RemoveAllViews
+	Activity.Title="Nuevo Reporte"
+	imv_fotografia_reporte.Color=Colors.Gray
+	Activity.AddView(imv_fotografia_reporte,15%x, 5%y, 70%x, 50%y)
+	dibujar_button(btn_escanear,"btn_escanear",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Escanear QR",15%x,60%y,70%x,10%y)
+	dibujar_button(btn_tomar_foto,"btn_tomar_foto",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Tomar Fotografia",15%x,72%y,70%x,10%y)
+	dibujar_button(btn_enviar,"btn_enviar",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Enviar",25%x,84%y,50%x,10%y)
+End Sub
+
+Sub dibujar_ultimosagregados1
+	Activity.RemoveAllViews
+	Activity.Title=("Mascotas disponibles")
+	dibujar_label(lbl_ultimos,"lbl_ultimos","Mascotas nuevas para adoptar:",0%x,5%y,100%x,10%y)
+	lv_lista_ultimos.Clear
+	Dim Renglon3 As Renglones
+				Renglon3.Renglon1 = "Max"
+				Renglon3.Renglon2 = "Pug"
+				lv_lista_ultimos.TwoLinesLayout.Label.Color=Colors.RGB(0,153,153)
+				lv_lista_ultimos.TwoLinesLayout.SecondLabel.Color=Colors.White
+				lv_lista_ultimos.AddTwoLines2("Nombre: "&Renglon3.Renglon1, "Raza: "&Renglon3.Renglon2,Renglon3)
+	lv_lista_ultimos.Color=Colors.Transparent
+	Activity.AddView(lv_lista_ultimos, 5%x, 20%y, 90%x, 85%y)
+End Sub
+
+Sub lv_lista_ultimos_ItemClick (Position As Int, Value As Object)
+'	Dim codigo_producto As Int
+'	Dim Renglon As Renglones
+'	Renglon = Value
+'	codigo_producto=Renglon.Renglon1
+'	obtener_nombre_producto
+	dibujar_ultimosagregados2
+End Sub
+
+Sub dibujar_ultimosagregados2
+	Activity.RemoveAllViews
+	Activity.Title="Datos de la mascota"
+	imv_fotografia_refugio.Color=Colors.Gray
+	Activity.AddView(imv_fotografia_refugio,25%x, 5%y, 50%x, 35%y)
+	dibujar_label(lbl_nombre_refugio,"lbl_nombre_refugio","Nombre:",0%x,40%y,40%x,10%y)
+	dibujar_label(lbl_raza_refugio,"lbl_raza_refugio","Raza:",0%x,50%y,40%x,10%y)
+	dibujar_label(lbl_color_refugio,"lbl_color_refugio","Color:",0%x,60%y,40%x,10%y)
+	dibujar_label(lbl_tamaño_refugio,"lbl_tamaño_refugio","Tamaño:",0%x,70%y,40%x,10%y)
+	dibujar_label(lbl_edad_aprox,"lbl_edad_aprox","Edad Aproximada:",0%x,80%y,70%x,10%y)
 End Sub
 
 Sub dibujar_label(general As Label,nombre As String, texto As String, left As Int, top As Int, largo As Int,ancho As Int)
 	general.Initialize(nombre)
-    general.TextSize = 4%x
+    general.TextSize = 3.5%x
     general.TextColor = Colors.Black
     general.Gravity = Gravity.CENTER
     general.text = texto
