@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package b4a.example;
+package com.sasem;
 
 public final class R {
     public static final class attr {

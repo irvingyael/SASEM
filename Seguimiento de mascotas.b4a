@@ -1,7 +1,7 @@
 ﻿Version=4.3
 IconFile=
 NumberOfModules=0
-Build1=Default,b4a.example
+Build1=Default,com.sasem
 DoNotOverwriteManifest=False
 ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="14"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~SetApplicationAttribute(android:theme, "@android:style/Theme.Holo.Light")~\n~'End of default text.~\n~
 NumberOfFiles=0
@@ -60,11 +60,15 @@ Sub Globals
 	Dim imv_fotografia As ImageView
 	Dim lbl_nombre, lbl_raza, lbl_color, lbl_tamaño, lbl_fecha_adopcion As Label
 	
-	Dim lbl_reportes As Label
+	Dim lbl_reportes,lbl_fecha_inicio,lbl_fecha_fin As Label
+	Dim spn_mes_inicio, spn_mes_fin As Spinner
+   	Dim lst_mes_inicio,lst_mes_fin As List
+	Dim btn_buscar As Button
 	Dim lv_lista_reportes As ListView
 	
 	Dim imv_fotografia_reporte As ImageView
 	Dim btn_escanear, btn_tomar_foto, btn_enviar As Button
+	Dim etxt_descripcion As EditText
 	
 	Dim lbl_ultimos As Label
 	Dim lv_lista_ultimos As ListView
@@ -212,7 +216,9 @@ End Sub
 
 Sub dibujar_historial
 	Activity.RemoveAllViews
-	dibujar_label(lbl_reportes,"lbl_reportes","Mis Reportes:",0%x,5%y,100%x,10%y)
+	dibujar_label(lbl_reportes,"lbl_reportes","Mis Reportes:",0%x,2%y,100%x,10%y)
+	dibujar_label(lbl_fecha_inicio,"lbl_fecha_inicio","De:",5%x,10%y,20%x,10%y)
+	dibujar_label(lbl_fecha_fin,"lbl_fecha_fin","A:",50%x,10%y,20%x,10%y)
 	lv_lista_reportes.Clear
 	Dim Renglon As Renglones
 				Renglon.Renglon1 = "Rocko"
@@ -222,16 +228,33 @@ Sub dibujar_historial
 				lv_lista_reportes.AddTwoLines2("Reporte de: "&Renglon.Renglon1, "Fecha: "&Renglon.Renglon2,Renglon)
 	lv_lista_reportes.Color=Colors.Transparent
 	Activity.AddView(lv_lista_reportes, 5%x, 20%y, 90%x, 85%y)
+	dibujar_button(btn_buscar,"btn_buscar",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Buscar",30%x,85%y,40%x,10%y)
+	spn_mes_inicio.Initialize("spn_mes_inicio")
+	spn_mes_fin.Initialize("spn_mes_fin")
+   	Activity.AddView(spn_mes_inicio,25%x,10%y,25%x,10%y)
+	Activity.AddView(spn_mes_fin,65%x,10%y,25%x,10%y)
+  	spn_mes_inicio.AddAll(Array As String("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"))
+	spn_mes_fin.AddAll(Array As String("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"))
+End Sub
+
+Sub spn_mes_inicio_ItemClick (Position As Int, Value As Object)
+    ToastMessageShow(""&spn_mes_inicio.GetItem(Position), True)
+End Sub
+
+Sub spn_mes_fin_ItemClick (Position As Int, Value As Object)
+	ToastMessageShow(""&spn_mes_fin.GetItem(Position), True)
 End Sub
 
 Sub dibujar_nuevoreporte
 	Activity.RemoveAllViews
 	Activity.Title="Nuevo Reporte"
 	imv_fotografia_reporte.Color=Colors.Gray
-	Activity.AddView(imv_fotografia_reporte,15%x, 5%y, 70%x, 50%y)
-	dibujar_button(btn_escanear,"btn_escanear",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Escanear QR",15%x,60%y,70%x,10%y)
-	dibujar_button(btn_tomar_foto,"btn_tomar_foto",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Tomar Fotografia",15%x,72%y,70%x,10%y)
-	dibujar_button(btn_enviar,"btn_enviar",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Enviar",25%x,84%y,50%x,10%y)
+	Activity.AddView(imv_fotografia_reporte,20%x, 3%y, 60%x, 40%y)
+	dibujar_text(etxt_descripcion,"etxt_descripcion",etxt_descripcion.INPUT_TYPE_TEXT,"Agrega una Descripción (500 Caracteres)",False,10%x,45%y,80%x,25%y)
+	etxt_descripcion.SingleLine=False
+	dibujar_button(btn_escanear,"btn_escanear",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Escanear QR",0.5%x,75%y,49%x,10%y)
+	dibujar_button(btn_tomar_foto,"btn_tomar_foto",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Tomar Fotografia",50%x,75%y,49%x,10%y)
+	dibujar_button(btn_enviar,"btn_enviar",Colors.RGB(0,153,153),Colors.RGB(0,76,153),"Enviar",26%x,86%y,49%x,10%y)
 End Sub
 
 Sub dibujar_ultimosagregados1
